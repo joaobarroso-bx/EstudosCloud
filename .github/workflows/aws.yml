@@ -1,0 +1,25 @@
+name: "Bucket - External AWS Access"
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  aws:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::245846690425:role/Aplicandofuncao
+          role-session-name: OIDCSession
+
+      - name: Test S3 Access
+        run: aws s3 ls s3://meu-bucket-vpc
